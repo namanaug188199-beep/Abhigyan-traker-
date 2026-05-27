@@ -1,0 +1,70 @@
+export default function StudyTreeTracker() { const [minutes, setMinutes] = React.useState(0); const [trees, setTrees] = React.useState(0); const [running, setRunning] = React.useState(false);
+
+React.useEffect(() => { let timer;
+
+if (running) {
+  timer = setInterval(() => {
+    setMinutes((prev) => {
+      const updated = prev + 1;
+
+      if (updated % 60 === 0) {
+        setTrees((t) => t + 1);
+      }
+
+      return updated;
+    });
+  }, 1000);
+}
+
+return () => clearInterval(timer);
+
+}, [running]);
+
+const getPlantStage = () => { if (trees === 0) return '🌱'; if (trees === 1) return '🪴'; if (trees === 2) return '🌿'; if (trees === 3) return '🌳'; return '🌲'; };
+
+return ( <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-green-950 flex items-center justify-center p-6"> <div className="bg-gray-900 border border-green-700 shadow-2xl rounded-3xl p-8 w-full max-w-md text-center text-white"> <h1 className="text-4xl font-bold mb-4">Study Tree Tracker</h1>
+
+<div className="text-8xl mb-6 animate-bounce">
+      {getPlantStage()}
+    </div>
+
+    <p className="text-xl font-semibold mb-2">
+      Study Time
+    </p>
+
+    <div className="text-5xl font-bold text-green-400 mb-6">
+      {Math.floor(minutes / 60)}h {minutes % 60}m
+    </div>
+
+    <div className="flex gap-4 justify-center mb-6">
+      <button
+        onClick={() => setRunning(true)}
+        className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-2xl text-lg shadow-lg"
+      >
+        Start
+      </button>
+
+      <button
+        onClick={() => setRunning(false)}
+        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-2xl text-lg shadow-lg"
+      >
+        Stop
+      </button>
+    </div>
+
+    <div className="bg-black/40 border border-green-700 rounded-2xl p-4 shadow-inner">
+      <p className="text-lg font-medium">
+        Trees Grown: <span className="font-bold text-green-400">{trees}</span>
+      </p>
+
+      <p className="text-sm mt-2 text-gray-300">
+        Every 1 hour of study grows your plant 🌱
+      </p>
+    </div>
+          <p className="mt-6 text-sm text-gray-400">
+      By Abhigyan Shahi
+    </p>
+  </div>
+</div>
+
+); }
